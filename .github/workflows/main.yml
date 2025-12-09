@@ -1,0 +1,17 @@
+import pytest
+from app import app
+
+class TestCalculatorBasic:
+    """Тесты для базового калькулятора сложения"""
+    
+    def test_calculator_post_valid_floats(self, client):
+        """Тест: POST запрос с дробными числами"""
+        response = client.post('/', data={
+            'num1': '3.5',
+            'num2': '2.1'
+        })
+        
+        assert response.status_code == 200
+        assert b'3.5' in response.data
+        assert b'2.1' in response.data
+        assert b'5.6' in response.data
