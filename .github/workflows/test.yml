@@ -1,0 +1,44 @@
+name: Test Calculator
+
+on: push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - run: pip install flask
+    
+    - name: Run tests
+      run: |
+        python -c "
+        from app import app
+        
+        # Тест 1: GET запрос
+        with app.test_client() as client:
+            response = client.get('/')
+            assert response.status_code == 200, 'GET запрос не работает'
+            print('✓ GET запрос работает')
+        
+        # Тест 2: POST запрос с числами
+        with app.test_client() as client:
+            response = client.post('/', data={'num1': '10', 'num2': '5'})
+            assert response.status_code == 200, 'POST запрос не работает'
+            assert b'15' in response.data, 'Сложение работает неверно'
+            print('✓ Сложение работает корректно')
+        
+        # Тест 3: Обработка ошибок
+        with app.test_client() as client:
+            response = client.post('/', data={'num1': 'abc', 'num2': '5'})
+            assert response.status_code == 200
+            assert b'Ошибка' in response.data
+            print('✓ Обработка ошибок работает')
+        
+        print('\\n✅ Все тесты пройдены успешно!')
+        "
