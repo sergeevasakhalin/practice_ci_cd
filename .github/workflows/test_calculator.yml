@@ -1,0 +1,23 @@
+from app import app
+
+def test_get_request():
+    """Тест: GET запрос работает"""
+    with app.test_client() as client:
+        response = client.get('/')
+        assert response.status_code == 200
+        print("✓ GET запрос работает")
+
+def test_post_addition():
+    """Тест: калькулятор правильно складывает числа"""
+    with app.test_client() as client:
+        response = client.post('/', data={'num1': '10', 'num2': '5'})
+        assert response.status_code == 200
+        assert b'15' in response.data or b'15.0' in response.data
+        print("✓ Сложение работает корректно")
+
+
+if __name__ == '__main__':
+    # Простой запуск без pytest
+    test_get_request()
+    test_post_addition()
+    print("\n✅ Все основные тесты пройдены!")
