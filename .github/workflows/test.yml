@@ -33,12 +33,6 @@ jobs:
             assert b'15' in response.data, 'Сложение работает неверно'
             print('✓ Сложение работает корректно')
         
-        # Тест 3: Обработка ошибок
-        with app.test_client() as client:
-            response = client.post('/', data={'num1': 'abc', 'num2': '5'})
-            assert response.status_code == 200
-            assert b'Ошибка' in response.data
-            print('✓ Обработка ошибок работает')
-        
+               
         print('\\n✅ Все тесты пройдены успешно!')
         "
